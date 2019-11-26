@@ -1,25 +1,25 @@
 'use stricts';
 var names = [
-  'bag',
-  'banana',
-  'bathroom',
-  'boots',
-  'breakfast',
-  'bubblegum',
-  'chair',
-  'cthulhu',
-  'dog-duck',
-  'dragon',
-  'pen',
-  'pet-sweep',
-  'scissors',
-  'shark',
-  'sweep',
-  'tauntaun',
-  'unicorn',
-  'usb',
-  'water-can',
-  'wine-glass'
+  'bag.jpg',
+  'banana.jpg',
+  'bathroom.jpg',
+  'boots.jpg',
+  'breakfast.jpg',
+  'bubblegum.jpg',
+  'chair.jpg',
+  'cthulhu.jpg',
+  'dog-duck.jpg',
+  'dragon.jpg',
+  'pen.jpg',
+  'pet-sweep.jpg',
+  'scissors.jpg',
+  'shark.jpg',
+  'sweep.png',
+  'tauntaun.jpg',
+  'unicorn.jpg',
+  'usb.gif',
+  'water-can.jpg',
+  'wine-glass.jpg'
 ];
 alert('please press on any image 25 time to vote');
 var leftImage = document.querySelector('#leftImage');
@@ -27,15 +27,15 @@ var centerImage = document.querySelector('#centerImage');
 var rightImage = document.querySelector('#rightImage');
 var imagesSection = document.querySelector('#imagesSection');
 var rounds = 25;
-var vote = 0;
 var voteChart = [];
-var viewChart = [];
 
 
-function BusMall(product) {
-  this.product = product;
-  this.imagePath = `img/${product}.jpg`;
-  this.votes = 0;
+
+function BusMall(path) {
+  var pathArr = path.split('.');
+  this.name = pathArr[0];
+  this.imagePath = `img/${this.name}.${pathArr[1]}`;
+  this.voting = 0;
   this.views = 0;
   BusMall.all.push(this);
 }
@@ -44,45 +44,19 @@ BusMall.all = [];
 for (let i = 0; i < names.length; i++) {
   new BusMall(names[i]);
 }
-
-
-function render() {
-  var leftBusMall = BusMall.all[randomNumber(0, BusMall.all.length - 1)];
-  var centerBusMall = BusMall.all[randomNumber(0, BusMall.all.length - 1)];
-  var rightBusMall = BusMall.all[randomNumber(0, BusMall.all.length - 1)];
-  while(leftBusMall === centerBusMall || leftBusMall === rightBusMall || centerBusMall === rightBusMall) {
-    leftBusMall = BusMall.all[randomNumber(0, BusMall.all.length - 1)];
-    centerBusMall = BusMall.all[randomNumber(0, BusMall.all.length - 1)];
-    rightBusMall = BusMall.all[randomNumber(0, BusMall.all.length - 1)];
+var previousIndexs = [];
+function getUniqueIndex() {
+  var index = randomNumber(0, BusMall.all.length - 1);
+  while (previousIndexs.includes(index)) {
+    index = randomNumber(0, BusMall.all.length - 1);
   }
-  leftBusMall.views++;
-  centerBusMall.views++;
-  rightBusMall.views++;
 
-  leftImage.setAttribute('src', leftBusMall.imagePath);
-  leftImage.setAttribute('alt', leftBusMall.product);
-  leftImage.setAttribute('title', leftBusMall.product);
 
-  centerImage.setAttribute('src', centerBusMall.imagePath);
-  centerImage.setAttribute('alt', centerBusMall.product);
-  centerImage.setAttribute('title', centerBusMall.product);
-
-  rightImage.setAttribute('src', rightBusMall.imagePath);
-  rightImage.setAttribute('alt', rightBusMall.product);
-  rightImage.setAttribute('title', rightBusMall.product);
-  if (rounds === vote)
-  {
-    var contienar = document.getElementById('imagesSection');
-    var ulEl = document.createElement('ul');
-    contienar.appendChild(ulEl);
-    for (var i = 0; i < BusMall.all.length; i++){
-      var liEl =  document.createElement('li');
-      ulEl.appendChild(liEl);
-      liEl.textContent = `this image ${BusMall.all[i].product} has this vote ${BusMall.all[i].votes} and this is view ${BusMall.all[i].views}`;
-      voteChart.push(BusMall.all[i]);
-      viewChart.push(BusMall.all[i]);
-    }
+  previousIndexs.push(index);
+  if (previousIndexs.length > 3) {
+    previousIndexs.shift();
   }
+  return index;
 }
 var ctx = document.getElementById('myChart').getContext('2d');
 var myChart = new Chart(ctx, {
@@ -110,16 +84,16 @@ var myChart = new Chart(ctx, {
           'rgba(153, 102, 255, 1)',
           'rgba(255, 159, 64, 1)'
         ],
-        borderWidth: 1
+        borderWidth: 1,
       }
-    ]
+    ],
   },
   options: {
     scales: {
       yAxes: [
         {
           ticks: {
-            beginAtZero: true
+            beginAtZero: true,
           },
         }
       ],
@@ -127,27 +101,103 @@ var myChart = new Chart(ctx, {
   },
 });
 
+function render() {
+  var leftProduct = BusMall.all[getUniqueIndex()];
+  var middleProduct = BusMall.all[getUniqueIndex()];
+  var rightProduct = BusMall.all[getUniqueIndex()];
+
+  leftProduct.views++;
+  middleProduct.views++;
+  rightProduct.views++;
+
+  leftImage.setAttribute('src', leftProduct.imagePath);
+  leftImage.setAttribute('alt', leftProduct.name);
+  leftImage.setAttribute('title', leftProduct.name);
+
+  centerImage.setAttribute('src', middleProduct.imagePath);
+  centerImage.setAttribute('alt', middleProduct.name);
+  centerImage.setAttribute('title', middleProduct.name);
+
+  rightImage.setAttribute('src', rightProduct.imagePath);
+  rightImage.setAttribute('alt', rightProduct.name);
+  rightImage.setAttribute('title', rightProduct.name);
+}
 render();
 
-
 function handleClick(e) {
-  if (e.target.id !== 'imagesSection') {
-    if (rounds >= vote){
-      rounds--;
-      console.log(rounds);
-    }
-
-    for (let i = 0; i < BusMall.all.length; i++) {
-      if (e.target.title === BusMall.all[i].product) {
-        BusMall.all[i].votes++;
+  rounds--;
+  console.log(rounds);
+  if (rounds !== 0) {
+    if (e.target.id !== 'imageSection') {
+      for (let x = 0; x < BusMall.all.length; x++) {
+        if (e.target.title === BusMall.all[x].name) {
+          BusMall.all[x].voting++;
+        }
       }
+      render();
     }
-    //console.table(BusMall.all);
-    render();
+  } else if (rounds === 0) {
+    imagesSection.removeEventListener('click', handleClick);
+    renderChartAndList();
   }
 }
-imagesSection.addEventListener('click', handleClick);
 
+imagesSection.addEventListener('click', handleClick);
 function randomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function renderChartAndList() {
+  var votes = [];
+  var views = [];
+  var labels = [];
+  var container = document.getElementById('showing');
+  var ulEl = document.createElement('ul');
+  container.appendChild(ulEl);
+  for (let z = 0; z < BusMall.all.length; z++) {
+    var liEl = document.createElement('li');
+    ulEl.appendChild(liEl);
+    liEl.textContent = `${BusMall.all[z].name} had ${BusMall.all[z].voting} votes and was shown ${BusMall.all[z].views} times`;
+    labels.push(BusMall.all[z].name);
+    votes.push(BusMall.all[z].voting);
+    views.push(BusMall.all[z].views);
+  }
+
+  var ctx = document.getElementById('myChart').getContext('2d');
+
+  var voteData = {
+    label: '# of Votes',
+    data: votes,
+    backgroundColor: '#ac7e00',
+  };
+
+  var viewsData = {
+    label: '# of Views',
+    data: views,
+    backgroundColor: '#ac5487',
+  };
+
+  var labelsInfo = {
+    labels: labels,
+    datasets: [voteData, viewsData],
+  };
+
+  var chartOptions = {
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            max : 10, min:0, stepsize:1.0,
+            beginAtZero: true,
+          },
+        }
+      ],
+    },
+  };
+
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: labelsInfo,
+    options: chartOptions,
+  });
 }
