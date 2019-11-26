@@ -1,5 +1,5 @@
 body {
-    background: rgb(168, 60, 60);
+    background:rgb(248, 248, 233);
   }
   header {
     text-align: center;
@@ -15,8 +15,8 @@ body {
   }
   header nav ul li a {
     text-decoration: none;
-    color: blue;
-    font-size: 25px;
+    color:black;
+    font-size: 30px;
     font-weight: 100;
   }
   header nav ul li a:hover {
@@ -36,5 +36,6 @@ body {
     border-radius: 5px;
   }
   h1{
-    color: blue;
+    color:black;
+    font-size: 30px;
   }
