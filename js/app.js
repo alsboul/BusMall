@@ -43,6 +43,7 @@ BusMall.all = [];
 for (let i = 0; i < names.length; i++) {
   new BusMall(names[i]);
 }
+// this function from mr.mahmoud
 var previousIndexs = [];
 function getUniqueIndex() {
   var index = randomNumber(0, BusMall.all.length - 1);
@@ -92,10 +93,14 @@ function handleClick(e) {
         }
       }
       render();
+
+
     }
   } else if (rounds === 0) {
     imagesSection.removeEventListener('click', handleClick);
+    updateView();
     renderChartAndList();
+
   }
 }
 
@@ -103,7 +108,6 @@ imagesSection.addEventListener('click', handleClick);
 function randomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
 function renderChartAndList() {
   var votes = [];
   var views = [];
@@ -119,7 +123,7 @@ function renderChartAndList() {
     votes.push(BusMall.all[z].voting);
     views.push(BusMall.all[z].views);
   }
-
+  // chart from me but litil bit change from mr.mahmoud code
   var ctx = document.getElementById('myChart').getContext('2d');
 
   var voteData = {
@@ -158,3 +162,15 @@ function renderChartAndList() {
     options: chartOptions,
   });
 }
+function updateView() {
+  var viewString = JSON.stringify(BusMall.all);
+  localStorage.setItem('view', viewString);
+}
+function getView() {
+  var viewString = localStorage.getItem('view');
+  if (viewString) {
+    BusMall.all = JSON.parse(viewString);
+    renderChartAndList();
+  }
+}
+getView();

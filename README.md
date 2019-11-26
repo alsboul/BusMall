@@ -5,3 +5,5 @@ i use som style and background for rhe index and BusMall to make more good to vi
 the hole project in the BusMall and app.js while the app.js contain evry thing logical in my project 
 
 https://github.com/alsboul/BusMall
+
+i add the local storage in the java script 
