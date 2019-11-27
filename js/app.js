@@ -170,7 +170,6 @@ function getView() {
   var viewString = localStorage.getItem('view');
   if (viewString) {
     BusMall.all = JSON.parse(viewString);
-    renderChartAndList();
   }
 }
 getView();
