@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 'use stricts';
 var names = [
   'bag.jpg',
@@ -129,7 +131,7 @@ function renderChartAndList() {
   var voteData = {
     label: '# of Votes',
     data: votes,
-    backgroundColor: '#ac7e00',
+    backgroundColor: '#ac7e01',
   };
 
   var viewsData = {
