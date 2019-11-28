@@ -60,7 +60,7 @@ function getUniqueIndex() {
   }
   return index;
 }
-
+//function to render the three images
 function render() {
   var leftProduct = BusMall.all[getUniqueIndex()];
   var middleProduct = BusMall.all[getUniqueIndex()];
@@ -105,11 +105,12 @@ function handleClick(e) {
 
   }
 }
-
+//event listener
 imagesSection.addEventListener('click', handleClick);
 function randomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+//function to render chart and list
 function renderChartAndList() {
   var votes = [];
   var views = [];
@@ -164,6 +165,7 @@ function renderChartAndList() {
     options: chartOptions,
   });
 }
+//function to local storage to store the data
 function updateView() {
   var viewString = JSON.stringify(BusMall.all);
   localStorage.setItem('view', viewString);
